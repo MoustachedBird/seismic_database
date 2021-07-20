@@ -1,0 +1,164 @@
+<div class="container">
+    <div class="row">
+        
+        <!-- FORM -->
+        <div class="card grey lighten-4">
+            <div class="card-content" style="width: 19rem;">
+                <span class="card-title">Test form</span>
+                <form #dataQueryForm="ngForm"(ngSubmit)="dataQuery(dataQueryForm)">
+                
+                    <!-- DATE-TIME START FIELD-->
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <label>Start date and time</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input type="datetime-local" name="time_start" #name="ngModel" 
+                            [(ngModel)]="plotQueryService.plotQuery.time_start" 
+                            required
+                            step="1"
+                            format-value="yyyy-MM-ddTHH:mm:ss"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- END DATE-TIME FIELD-->
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <label>End date and time</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input type="datetime-local" name="time_end" #name="ngModel" 
+                            [(ngModel)]="plotQueryService.plotQuery.time_end" 
+                            required
+                            step="1"
+                            format-value="yyyy-MM-ddTHH:mm:ss"
+                            />
+                        </div>
+                    </div>
+                    
+                    <!-- RESOLUTION FIELD-->
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <label>Resolution of query</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input type="number" name="resolution" #name="ngModel" 
+                            [(ngModel)]="plotQueryService.plotQuery.resolution"
+                            placeholder="Resolution number (1-1500)"
+                            required
+                            min="1"
+                            max="1500"
+                            >
+                        </div>
+                    </div>
+                    
+
+                    <!-- SENSORS TO SHOW FIELD-->
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <label>Sensors or axes to query</label>
+                        </div>
+                    </div>
+                    <label></label> 
+                
+                    <!-- Checkboxes-->    
+                    <!-- MMA8451 X-->
+                    <p>
+                    <label>
+                        <input type="checkbox" class="filled-in" [(ngModel)]="plotQueryService.plotQuery.mma8451q_x" name='mma8451q_x'/>
+                        <span>MMA8451Q X</span>
+                    </label>
+                    </p>
+
+                    <!-- MMA8451 Y-->
+                    <p> 
+                    <label>
+                        <input type="checkbox" class="filled-in" [(ngModel)]="plotQueryService.plotQuery.mma8451q_y" name='mma8451q_y'/>
+                        <span>MMA8451Q Y</span>
+                    </label>
+                    </p>
+
+                    <!-- MMA8451 Z-->
+                    <p>
+                    <label>
+                        <input type="checkbox" class="filled-in" [(ngModel)]="plotQueryService.plotQuery.mma8451q_z" name='mma8451q_z'/>
+                        <span>MMA8451Q Z</span>
+                    </label>
+                    </p>
+                    
+                    <!-- ADXL355 X-->
+                    <p>
+                    <label>
+                        <input type="checkbox" class="filled-in" [(ngModel)]="plotQueryService.plotQuery.adxl355_x" name='adxl355_x'/>
+                        <span>ADXL355 X</span>
+                    </label>
+                    </p>
+                    
+                    <!-- ADXL355 Y-->
+                    <p>
+                    <label>
+                        <input type="checkbox" class="filled-in" [(ngModel)]="plotQueryService.plotQuery.adxl355_y" name='adxl355_y'/>
+                        <span>ADXL355 Y</span>
+                    </label>
+                    </p>
+                        
+                    <!-- ADXL355 Z-->
+                    <p>
+                    <label>
+                        <input type="checkbox" class="filled-in" [(ngModel)]="plotQueryService.plotQuery.adxl355_z" name='adxl355_z'/>
+                        <span>ADXL355 Z</span>
+                    </label>
+                    </p>
+
+                    <!-- SM-24-->
+                    <p>
+                    <label>
+                        <input type="checkbox" class="filled-in" [(ngModel)]="plotQueryService.plotQuery.sm24" name='sm24'/>
+                        <span>SM-24 geophone</span>
+                    </label>
+                    </p>
+
+                     <!-- BUTTONS -->
+                     <div class="card-action">
+                        <div class="input-field col s12">
+                            <!-- LOADING ICON... -->
+                            <div class="col s12">
+                                <mat-spinner diameter="40" *ngIf="statusSpinner" ></mat-spinner>
+                            </div>            
+                            <button class="btn right" (click)="showSpinner()">Plot</button>
+                            <button class="btn right" (click)="resetForm(dataQueryForm)">Clean</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Middle space--> 
+        <div class="col s2"></div>
+
+        <!-- SHOW TEST CHART--> 
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">{{ title }}</span>
+            
+                <!-- Dinamically add buttons depending of check box
+                https://angular.io/api/common/NgForOf
+                --> 
+                <button *ngFor="let buttonText of buttonsTexts; let i = index;"(click)="updateChart(i)">{{buttonText}}</button>
+                <p></p>
+                <figure id="line_chart"></figure>    
+                
+                <!-- Display error message--> 
+                <h1 *ngIf="statusError" class="center"> Error: please try again :(</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
